@@ -18,16 +18,20 @@ public class SignInService {
     final String errorDefault = "Credenciais inválidas";
 
     private final AuthenticationManager authenticationManager;
+    private final CreateTokenService createTokenService;
+    private final CreateRefreshToken createRefreshToken;
 
     public TokensDTO run(SignInDTO dto) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
         var auth = authenticationManager.authenticate(usernamePassword);
         User user = (User) auth.getPrincipal();
 
+        String token = createTokenService.run(user);
+        String refreshToken = createRefreshToken.run(user.getId());
         return TokensDTO
                 .builder()
-                .token("token")
-                .refreshToken("refreshToken")
+                .token(token)
+                .refreshToken(refreshToken)
                 .build();
     }
 }
