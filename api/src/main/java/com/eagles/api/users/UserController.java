@@ -1,11 +1,14 @@
 package com.eagles.api.users;
 
 import com.eagles.api.users.dto.CreateUserDTO;
-import com.eagles.api.users.dto.UserDTO;
+import com.eagles.api.users.dto.CreateUserResponseDTO;
 import com.eagles.api.users.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping(value = "users")
@@ -19,9 +22,17 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> create(@RequestBody CreateUserDTO dto) {
-        UserDTO userDTO = usersService.create(dto);
-        return ResponseEntity.ok(userDTO);
+    public ResponseEntity<CreateUserResponseDTO> create(@RequestBody CreateUserDTO dto) {
+        CreateUserResponseDTO userDTO = usersService.create(dto);
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(userDTO.user().getId())
+                .toUri();
+
+        return ResponseEntity
+                .created(uri)
+                .body(userDTO);
     }
 
 }

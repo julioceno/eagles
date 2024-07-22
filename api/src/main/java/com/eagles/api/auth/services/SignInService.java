@@ -15,23 +15,16 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class SignInService {
     final Logger logger = LoggerFactory.getLogger(SignInService.class);
-    final String errorDefault = "Credenciais inválidas";
 
     private final AuthenticationManager authenticationManager;
-    private final CreateTokenService createTokenService;
-    private final CreateRefreshToken createRefreshToken;
+    private final CreateTokensService createTokensService;
 
     public TokensDTO run(SignInDTO dto) {
+        logger.info("Verifying if credentials are valid");
         var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
         var auth = authenticationManager.authenticate(usernamePassword);
         User user = (User) auth.getPrincipal();
 
-        String token = createTokenService.run(user);
-        String refreshToken = createRefreshToken.run(user.getId());
-        return TokensDTO
-                .builder()
-                .token(token)
-                .refreshToken(refreshToken)
-                .build();
+        return createTokensService.run(user);
     }
 }

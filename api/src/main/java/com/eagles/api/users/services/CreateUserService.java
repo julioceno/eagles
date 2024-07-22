@@ -1,9 +1,12 @@
 package com.eagles.api.users.services;
 
+import com.eagles.api.auth.dto.TokensDTO;
+import com.eagles.api.auth.services.CreateTokensService;
 import com.eagles.api.infra.http.exceptions.BadRequestException;
 import com.eagles.api.users.domain.User;
 import com.eagles.api.users.domain.UserRepository;
 import com.eagles.api.users.dto.CreateUserDTO;
+import com.eagles.api.users.dto.CreateUserResponseDTO;
 import com.eagles.api.users.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +25,18 @@ public class CreateUserService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserDTO run(CreateUserDTO createUserDTO) {
+    @Autowired
+    private CreateTokensService createTokensService;
+
+    public CreateUserResponseDTO run(CreateUserDTO createUserDTO) {
         verifyIfUserAlreadyExists(createUserDTO.email());
         User userBuilt = buildUser(createUserDTO);
         User createdUser = createUser(userBuilt);
-        return new UserDTO(createdUser);
+
+        UserDTO userDTO = new UserDTO(createdUser);
+        TokensDTO tokens = createTokensService.run(createdUser);
+
+        return new CreateUserResponseDTO(userDTO, tokens);
     }
 
     private void verifyIfUserAlreadyExists(String email) {
