@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: eagles-api
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/eagles}
+    username: ${DB_USERNAME:eagles}
+    password: ${DB_PASSWORD:password}
+
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:secret}
