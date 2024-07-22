@@ -24,7 +24,7 @@ public class RefreshToken {
     @Column(name = "expires_in", nullable = false)
     private Instant expiresIn;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id", nullable = false, unique = true)
     private String userId;
 
     @CreatedDate
