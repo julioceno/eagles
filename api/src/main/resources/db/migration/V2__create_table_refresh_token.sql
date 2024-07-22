@@ -1,6 +1,6 @@
 CREATE TABLE refresh_token(
     id TEXT NOT NULL,
-    expires_in TEXT NOT NULL,
+    expires_in TIMESTAMP(3) DEFAULT NULL,
     user_id TEXT NOT NULL,
 
     created_at TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
