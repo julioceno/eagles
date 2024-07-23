@@ -1,3 +1,4 @@
+import React from "react";
 import { TextInput } from "react-native";
 
 type InputTextProps = {
@@ -10,15 +11,15 @@ type InputTextProps = {
 export default function InputText({
   placeholder,
   value,
-  className,
   onChangeText,
+  className,
 }: InputTextProps) {
   return (
     <TextInput
       placeholder={placeholder}
       value={value}
       onChangeText={onChangeText}
-      className={`rounded-xl p-2 ${className} shadow-lg bg-white text-lg w-full h-12`}
+      className={`rounded-xl p-2 ${className} shadow-lg shadow-gray-700 bg-white text-sm w-full h-12`}
     />
   );
 }

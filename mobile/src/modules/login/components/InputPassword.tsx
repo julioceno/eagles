@@ -3,29 +3,31 @@ import { View, TextInput, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 type InputPasswordProps = {
-  password: string;
-  setPassword: (value: string) => void;
+  value: string;
+  onChangeText: (value: string) => void;
   seePassword: boolean;
   setSeePassword: (value: boolean) => void;
+  className?: string;
 };
 
 export default function InputPassword({
-  password,
-  setPassword,
+  value,
+  onChangeText,
   seePassword,
   setSeePassword,
+  className,
 }: InputPasswordProps) {
   return (
-    <View className="rounded-xl w-full p-2 flex flex-row justify-between items-center shadow-lg bg-white h-12">
+    <View className={`rounded-xl w-full p-2 flex flex-row justify-between items-center shadow-lg shadow-gray-700 bg-white h-12 ${className}`}>
       <TextInput
         placeholder="Senha"
-        value={password}
-        onChangeText={setPassword}
+        value={value}
+        onChangeText={onChangeText}
         secureTextEntry={!seePassword}
-        className="w-[95%] h-full text-lg"
+        className="w-[90%] h-12"
       />
       <TouchableOpacity
-        className="w-6 h-6"
+        className="flex flex-col justify-center items-center w-12 h-12"
         onPress={() => setSeePassword(!seePassword)}
       >
         <Feather

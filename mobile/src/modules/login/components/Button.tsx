@@ -16,35 +16,18 @@ export default function Button({
   disabled = false,
   loading = false,
 }: ButtonProps) {
-
-  const getButtonColor = (type: "button" | "submit" | "reset", disabled?: boolean) => {
-    if (disabled) return "gray";
-    switch (type) {
-      case "submit":
-        return "blue";
-      case "reset":
-        return "red";
-      case "button":
-      default:
-        return "green";
-    }
-  };
-
-  const buttonColor = getButtonColor(type, disabled);
-
   return (
     <TouchableOpacity
       onPress={onClick}
       disabled={disabled || loading}
-      className={`
-        ${buttonColor === "gray" ? "bg-gray-300" : `bg-primary-blue`}
-        p-2 rounded-xl flex justify-center items-center w-full h-12 shadow-lg ${
-          disabled || loading ? "opacity-60" : "text-primary-blue"}`}
+      className={`bg-gray-300  p-2 rounded-xl flex justify-center items-center w-full h-12 shadow-lg shadow-gray-700 ${
+        disabled || loading ? "opacity-60" : "text-primary-blue"
+      } ${disabled ? "bg-gray-300" : "bg-primary-blue"}`}
     >
       {loading ? (
         <ActivityIndicator size="small" color="#fff" />
       ) : (
-        <Text className="text-white font-bold text-lg">{title}</Text>
+        <Text className="text-white font-bold text-sm">{title}</Text>
       )}
     </TouchableOpacity>
   );
