@@ -30,8 +30,4 @@ public class RefreshToken {
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
-
-    @CreatedDate
-    @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
 }

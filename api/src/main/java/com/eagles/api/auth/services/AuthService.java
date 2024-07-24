@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final SignInService signInService;
     private final RefreshTokenService refreshTokenService;
+    private final LogoutService logoutService;
 
     public TokensDTO signIn(SignInDTO signInDTO) {
         return signInService.run(signInDTO);
@@ -18,5 +19,9 @@ public class AuthService {
 
     public TokensDTO refreshToken(RefreshTokenDTO refreshTokenDTO) {
         return refreshTokenService.run(refreshTokenDTO);
+    }
+
+    public void logout(String userId) {
+        logoutService.run(userId);
     }
 }

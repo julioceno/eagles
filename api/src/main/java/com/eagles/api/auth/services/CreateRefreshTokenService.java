@@ -5,6 +5,7 @@ import com.eagles.api.auth.domain.RefreshTokenRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -13,8 +14,11 @@ import java.time.Instant;
 import static java.lang.String.format;
 
 @Service
-public class CreateRefreshToken {
-    private final Logger logger = LoggerFactory.getLogger(CreateRefreshToken.class);
+public class CreateRefreshTokenService {
+    private final Logger logger = LoggerFactory.getLogger(CreateRefreshTokenService.class);
+
+    @Value("${api.security.refreshToken.expiresIn}")
+    private Long refreshTokenExpiresIn;
 
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
@@ -49,7 +53,7 @@ public class CreateRefreshToken {
     private Instant generateExpirationDate(){
         return Instant
                 .now()
-                .plus(Duration.ofHours(8)); // TODO: get value from properties
+                .plus(Duration.ofMillis(refreshTokenExpiresIn));
     }
 
     private RefreshToken createRefreshToken(RefreshToken refreshToken) {

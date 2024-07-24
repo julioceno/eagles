@@ -10,3 +10,8 @@ api:
   security:
     token:
       secret: ${JWT_SECRET:secret}
+      expiresIn: ${ACCESS_TOKEN_EXPIRES_IN:900000}
+    refreshToken:
+      expiresIn: ${ACCESS_TOKEN_EXPIRES_IN:86400000}
+      refreshIn: ${ACCESS_TOKEN_REFRESH_IN:4320000}
+

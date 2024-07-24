@@ -26,4 +26,10 @@ public class AuthController {
         TokensDTO tokensDTO = authService.refreshToken(refreshTokenDTO);
         return ResponseEntity.ok(tokensDTO);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestAttribute("authorization") String token) {
+        authService.logout(token);
+        return ResponseEntity.noContent().build();
+    }
 }

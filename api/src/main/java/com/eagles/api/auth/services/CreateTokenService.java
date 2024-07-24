@@ -20,8 +20,11 @@ public class CreateTokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
+    @Value("${api.security.token.expiresIn}")
+    private Long accessTokenExpiresIn;
+
     public String run(User user){
-        SubjectDTO subjectDTO = new SubjectDTO(user.getEmail());
+        SubjectDTO subjectDTO = new SubjectDTO(user.getId(), user.getEmail());
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -41,7 +44,7 @@ public class CreateTokenService {
     private Instant generateExpirationDate(){
         return Instant
                 .now()
-                .plus(Duration.ofHours(30)); // TODO Diminuir o tempo
+                .plus(Duration.ofMillis(accessTokenExpiresIn));
     }
 
 }

@@ -14,7 +14,7 @@ public class CreateTokensService {
     final Logger logger = LoggerFactory.getLogger(CreateTokensService.class);
 
     private final CreateTokenService createTokenService;
-    private final CreateRefreshToken createRefreshToken;
+    private final CreateRefreshTokenService createRefreshToken;
 
     public TokensDTO run(User user) {
         logger.info("Generate all tokens....");

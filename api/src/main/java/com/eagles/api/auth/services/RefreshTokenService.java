@@ -7,26 +7,37 @@ import com.eagles.api.auth.dto.TokensDTO;
 import com.eagles.api.infra.http.exceptions.UnauthorizedException;
 import com.eagles.api.users.domain.User;
 import com.eagles.api.users.domain.UserRepository;
-import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
 
 @Service
-@AllArgsConstructor
 public class RefreshTokenService {
     private final Logger logger = LoggerFactory.getLogger(RefreshTokenService.class);
 
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final UserRepository userRepository;
-    private final CreateTokenService createTokenService;
-    private final CreateRefreshToken createRefreshToken;
+    @Value("${api.security.refreshToken.refreshIn}")
+    private Long refreshTokenRefreshIn;
+
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CreateTokenService createTokenService;
+
+    @Autowired
+    private CreateRefreshTokenService createRefreshTokenService;
 
     public TokensDTO run(RefreshTokenDTO refreshTokenDTO) {
         RefreshToken refreshToken = getRefreshToken(refreshTokenDTO.refreshToken());
@@ -35,6 +46,14 @@ public class RefreshTokenService {
         User user = getUser(refreshToken.getUserId());
         String token = createTokenService.run(user);
 
+        boolean canUpdateRefreshToken = this.canUpdateRefreshToken(refreshToken);
+        if (canUpdateRefreshToken) {
+            logger.info("Updating refresh token and return...");
+            String refreshTokenUpdated = createRefreshTokenService.run(user.getId());
+            return new TokensDTO(token, refreshTokenUpdated);
+        }
+
+        logger.info("Return only access token");
         return new TokensDTO(token, null);
     }
 
@@ -72,4 +91,13 @@ public class RefreshTokenService {
         return user;
     }
 
+    private boolean canUpdateRefreshToken(RefreshToken refreshToken) {
+        Instant createdAtInstant = refreshToken.getCreatedAt().toInstant();
+        Instant now = new Date().toInstant();
+
+        long hoursTokenCreated = Duration.between(createdAtInstant, now).toHours();
+        long hoursToExpires = TimeUnit.MILLISECONDS.toHours(refreshTokenRefreshIn);
+
+        return hoursTokenCreated > hoursToExpires;
+    }
 }
