@@ -19,7 +19,6 @@ class UsersServiceTest {
     @Mock
     CreateUserService createUserService;
 
-
     @Test
     void shouldCallCreateUserServiceAndInvokeRunMethod() {
         CreateUserDTO createUserDTO = new CreateUserDTO("", "", "");

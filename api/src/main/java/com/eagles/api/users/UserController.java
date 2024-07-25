@@ -16,11 +16,6 @@ public class UserController {
     @Autowired
     private UsersService usersService;
 
-    @GetMapping
-    public ResponseEntity<String> findAll() {
-        return ResponseEntity.ok("foi");
-    }
-
     @PostMapping
     public ResponseEntity<CreateUserResponseDTO> create(@RequestBody CreateUserDTO dto) {
         CreateUserResponseDTO userDTO = usersService.create(dto);
