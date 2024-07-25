@@ -2,6 +2,7 @@ package com.eagles.api.auth.services;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.eagles.api.auth.dto.SubjectDTO;
 import com.eagles.api.infra.http.exceptions.UnauthorizedException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -33,7 +34,8 @@ public class DecodedTokenService {
 
             logger.info("Decoded token");
             return subjectJson;
-        } catch (JsonProcessingException e) {
+        } catch (JsonProcessingException | JWTDecodeException e) {
+            logger.error("Ocurred error when decoded token");
             throw new UnauthorizedException();
         }
     }
