@@ -34,7 +34,6 @@ public class SecurityConfig {
 
 
     private void authorizeHttpRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
-        // TODO: adjusting permissions
         authorize
                 .requestMatchers(HttpMethod.POST, "/auth/sign-in").permitAll()
                 .requestMatchers(HttpMethod.POST, "/auth/refresh-token").permitAll()
