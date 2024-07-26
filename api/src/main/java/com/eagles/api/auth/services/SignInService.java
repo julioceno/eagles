@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,9 +23,10 @@ public class SignInService {
     public TokensDTO run(SignInDTO dto) {
         logger.info("Verifying if credentials are valid");
         var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
-        var auth = authenticationManager.authenticate(usernamePassword);
+        Authentication auth = authenticationManager.authenticate(usernamePassword);
         User user = (User) auth.getPrincipal();
 
+        logger.info("Credentials are valid");
         return createTokensService.run(user);
     }
 }
